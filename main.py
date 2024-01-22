@@ -26,7 +26,6 @@ dict_asig = {
 def deteccionErrores(df):
     # Obtén la lista de nombres de alumnos ordenada y sin duplicados
     alumnos_list = sorted(list(df['NOMBRE'].drop_duplicates()))
-    print(alumnos_list)
 
     # Obtén la lista de asignaturas ordenada y sin duplicados
     asignatura_list = sorted(list(df['ASIGNATURA'].drop_duplicates()))
@@ -39,12 +38,22 @@ def deteccionErrores(df):
 
             
 
+            # Verifica si no hay notas para el alumno y asignatura actual
             if len(filt_al_as_df) == 0:
                 print(f'No hay notas para el alumno {alum} y la asignatura {asig}')
+            # Verifica si hay más de una nota para el alumno y asignatura actual
             elif len(filt_al_as_df) > 1:
                 print(f'Hay más de una nota para el alumno {alum} y la asignatura {asig}')
-                
-
+        
+        
+        # Itera sobre cada fila del DataFrame
+        for index, row in df.iterrows():
+            trimestre_list = ['NOTA T1', 'NOTA T2', 'NOTA T3']
+            # Itera sobre cada trimestre
+            for trimestre in trimestre_list:
+                # Verifica si la nota para el trimestre actual no está en el rango [0.0, 10.0]
+                if not((row[trimestre] >= 0.0) and (row[trimestre] <= 10.0)):
+                    print(f'La nota {row[trimestre]} no es válida para el trimestre {trimestre}')
 
 
 
