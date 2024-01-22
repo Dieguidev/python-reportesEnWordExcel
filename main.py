@@ -37,8 +37,14 @@ def deteccionErrores(df):
             # Filtra el DataFrame para obtener las filas correspondientes al alumno y asignatura actual
             filt_al_as_df = df[(df['NOMBRE'] == alum) & (df['ASIGNATURA'] == asig)]
 
-            # Imprime el DataFrame filtrado para el alumno y asignatura actual
-            print(filt_al_as_df)
+            
+
+            if len(filt_al_as_df) == 0:
+                print(f'No hay notas para el alumno {alum} y la asignatura {asig}')
+            elif len(filt_al_as_df) > 1:
+                print(f'Hay más de una nota para el alumno {alum} y la asignatura {asig}')
+                
+
 
 
 
