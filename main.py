@@ -22,6 +22,28 @@ dict_asig = {
 }
 
 
+# Función que realiza la detección de errores en un DataFrame
+def deteccionErrores(df):
+    # Obtén la lista de nombres de alumnos ordenada y sin duplicados
+    alumnos_list = sorted(list(df['NOMBRE'].drop_duplicates()))
+    print(alumnos_list)
+
+    # Obtén la lista de asignaturas ordenada y sin duplicados
+    asignatura_list = sorted(list(df['ASIGNATURA'].drop_duplicates()))
+
+    # Itera sobre cada alumno y asignatura
+    for alum in alumnos_list:
+        for asig in asignatura_list:
+            # Filtra el DataFrame para obtener las filas correspondientes al alumno y asignatura actual
+            filt_al_as_df = df[(df['NOMBRE'] == alum) & (df['ASIGNATURA'] == asig)]
+
+            # Imprime el DataFrame filtrado para el alumno y asignatura actual
+            print(filt_al_as_df)
+
+
+
+
+
 def main():
     # Lee el archivo Excel y carga los datos en un DataFrame usando pandas
     excel_df = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Notas')
@@ -34,7 +56,7 @@ def main():
         
     # Crea una lista de asignaturas únicas en el DataFrame las ordena y la imprime
     asig_list = sorted(list(excel_df['ASIGNATURA'].drop_duplicates()))
-    print(asig_list)
+    # print(asig_list)
     
     
     # Crea una lista vacía para almacenar los valores de las columnas 'ASIGNATURA'
@@ -46,7 +68,9 @@ def main():
         valorTd = dict_asig[item]
         # Agrega el valor a la lista
         filter_td_asig.append(valorTd)
-    print(filter_td_asig)
+    print('')
+    
+    deteccionErrores(excel_df)
     
 
 if __name__=='__main__':
