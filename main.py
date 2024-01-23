@@ -1,9 +1,13 @@
 import pandas as pd
 import sys
+from docxtpl import DocxTemplate
 
-
+#excel 
 NOTAS_ALUMNOS_PATH=r'./inputs/Notas_Alumnos.xlsx'
-print(NOTAS_ALUMNOS_PATH)
+
+#word
+NOTAS_ALUMNOS_PATH_WORD=r'./inputs/Plantilla_Notas.docx'
+PATH_OUTPUT_WORD=r'./outputs'
 
 
 dict_asig = {
@@ -73,6 +77,24 @@ def deteccionErrores(df):
 
 
 def main():
+    
+    #Cargar documento
+    docs_tpl = DocxTemplate(NOTAS_ALUMNOS_PATH_WORD)
+    
+    #Context
+    context = {
+        'curso': '2021/2022',
+        'nombre_alumno': 'Juan Pérez',
+        'clase': '4-C'
+    }
+    #Renderizar el word
+    docs_tpl.render(context)
+    #Guardar el word
+    docs_tpl.save(f'{PATH_OUTPUT_WORD}/Notas_Alumnos.docx')
+        
+    
+    
+    
     # Lee el archivo Excel y carga los datos en un DataFrame usando pandas
     excel_df = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Notas')
 
