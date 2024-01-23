@@ -1,5 +1,5 @@
 import pandas as pd
-
+import sys
 
 
 NOTAS_ALUMNOS_PATH=r'./inputs/Notas_Alumnos.xlsx'
@@ -24,6 +24,9 @@ dict_asig = {
 
 # Función que realiza la detección de errores en un DataFrame
 def deteccionErrores(df):
+    
+    err1, err2, err3 = False, False, False
+    
     # Obtén la lista de nombres de alumnos ordenada y sin duplicados
     alumnos_list = sorted(list(df['NOMBRE'].drop_duplicates()))
 
@@ -41,9 +44,11 @@ def deteccionErrores(df):
             # Verifica si no hay notas para el alumno y asignatura actual
             if len(filt_al_as_df) == 0:
                 print(f'No hay notas para el alumno {alum} y la asignatura {asig}')
+                err1 = True
             # Verifica si hay más de una nota para el alumno y asignatura actual
             elif len(filt_al_as_df) > 1:
                 print(f'Hay más de una nota para el alumno {alum} y la asignatura {asig}')
+                err2 = True
         
         
         # Itera sobre cada fila del DataFrame
@@ -54,8 +59,16 @@ def deteccionErrores(df):
                 # Verifica si la nota para el trimestre actual no está en el rango [0.0, 10.0]
                 if not((row[trimestre] >= 0.0) and (row[trimestre] <= 10.0)):
                     print(f'La nota {row[trimestre]} no es válida para el trimestre {trimestre}')
+                    err3 = True
 
-
+        if err1 or err2 or err3:
+            print('')
+            print('Se encontraron errores en el DataFrame:')
+            sys.exit(1)
+        else:
+            print('')
+            print('No se encontraron errores en el DataFrame.')
+            sys.exit(0)
 
 
 
