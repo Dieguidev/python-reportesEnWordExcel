@@ -102,7 +102,7 @@ def crearWordAsignarTag(datos_alumnos, excel_df):
         # Obtiene el valor de la columna 'ASIGNATURA' correspondiente a la asignatura actual
         valorTd = dict_asig[item]
         # Agrega el valor a la lista
-        filter_td_asig.append(valorTd)
+        filter_td_asig.append(valorTd.upper())
     print('')
 
     #Cargar documento de plantilla
@@ -115,6 +115,14 @@ def crearWordAsignarTag(datos_alumnos, excel_df):
         # Obtiene la clase correspondiente a la primera fila del DataFrame filtrado
         clase = filt_datos_alumnos_df.iloc[0]['CLASE']
         # Imprime el nombre del alumno y la clase
+
+        #Creamos tabla de notas
+        asignatura_list = []
+        #iterar sobre los indices de asignaturas
+        for asig_idx in range(len(asig_list)):
+            asign = asig_list[asig_idx]
+            filt_al_asig_excel_df = excel_df[(excel_df['NOMBRE'] == nombre_alumno) & (excel_df['ASIGNATURA'] == asign)]
+            print(filt_al_asig_excel_df)
 
         #Context
         context = {
