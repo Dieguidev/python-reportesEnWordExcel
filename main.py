@@ -77,6 +77,15 @@ def deteccionErrores(df):
         #sys.exit(0)
 
 
+# Generame una funcion para eliminar tildes de un texto y lo reemplace por la misma letra pero sin tilde de mayusculas
+
+def remove_tildes_mayus(text):
+    return text.replace('Á', 'A').replace('É', 'E').replace('Í', 'I').replace('Ó', 'O').replace('Ú', 'U')
+
+
+
+
+
 
 def main():
     
@@ -139,6 +148,8 @@ def main():
         #Renderizar el word
         docs_tpl.render(context)
         title = f'Notas_{nombre_alumno}'
+        title = title.replace(' ', '_').upper()
+        title = remove_tildes_mayus(title)
         #Guardar el word
         docs_tpl.save(f'{PATH_OUTPUT_WORD}/{title}.docx')
         
