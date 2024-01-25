@@ -10,6 +10,8 @@ NOTAS_ALUMNOS_PATH_WORD=r'./inputs/Plantilla_Notas.docx'
 PATH_OUTPUT_WORD=r'./outputs'
 
 
+CURSO = '2022-2023'
+
 dict_asig = {
     'LENGUA CASTELLANA Y LITERATURA':   'Lengua Castellana y Literatura',
     'BIOLOGIA':                         'Biología',
@@ -81,33 +83,28 @@ def main():
     #Cargar documento
     docs_tpl = DocxTemplate(NOTAS_ALUMNOS_PATH_WORD)
     
-    #Context
-    context = {
-        'curso': '2021/2022',
-        'nombre_alumno': 'Juan Pérez',
-        'clase': '4-C'
-    }
-    #Renderizar el word
-    docs_tpl.render(context)
-    #Guardar el word
-    docs_tpl.save(f'{PATH_OUTPUT_WORD}/Notas_Alumnos.docx')
-        
+    
     
     
     
     # Lee el archivo Excel y carga los datos en un DataFrame usando pandas
     excel_df = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Notas')
+    datos_alumnos = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Datos_Alumnos')
+
 
     # Itera sobre cada fila del DataFrame
-    for index, row in excel_df.iterrows():
-        # Imprime el índice de la fila, el valor de la columna 'NOMBRE' y el valor de la columna 'NOTA T1'
-        print(index, row['NOMBRE'], row['NOTA T1'])
+    # for index, row in excel_df.iterrows():
+    #     # Imprime el índice de la fila, el valor de la columna 'NOMBRE' y el valor de la columna 'NOTA T1'
+    #     print(index, row['NOMBRE'], row['NOTA T1'])
         
         
     # Crea una lista de asignaturas únicas en el DataFrame las ordena y la imprime
     asig_list = sorted(list(excel_df['ASIGNATURA'].drop_duplicates()))
-    # print(asig_list)
+    print(asig_list)
     
+    nombre_alumno_list = sorted(list(datos_alumnos['NOMBRE']))
+    print(nombre_alumno_list)
+    nombre_alumno = nombre_alumno_list[0]
     
     # Crea una lista vacía para almacenar los valores de las columnas 'ASIGNATURA'
     filter_td_asig = []
@@ -121,6 +118,20 @@ def main():
     print('')
     
     deteccionErrores(excel_df)
+    
+    
+    
+    #Context
+    context = {
+        'curso': CURSO,
+        'nombre_alumno': nombre_alumno,
+        'clase': '4-C'
+    }
+    #Renderizar el word
+    docs_tpl.render(context)
+    #Guardar el word
+    docs_tpl.save(f'{PATH_OUTPUT_WORD}/Notas_Alumnos.docx')
+        
     
 
 if __name__=='__main__':
