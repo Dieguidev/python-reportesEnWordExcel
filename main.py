@@ -116,30 +116,31 @@ def main():
     print('')
     
     deteccionErrores(excel_df)
-
-
+    
 
     # Obtén una lista ordenada y sin duplicados de nombres de alumnos
     nombre_alumno_list = sorted(list(datos_alumnos['NOMBRE']))
-    # Obtén el primer nombre de la lista (suponiendo que ya está ordenada)
-    nombre_alumno = nombre_alumno_list[0]
-    # Filtra el DataFrame para obtener las filas correspondientes al primer nombre de la lista
-    filt_datos_alumnos_df = datos_alumnos[(datos_alumnos['NOMBRE'] == nombre_alumno)]
-    # Obtiene la clase correspondiente a la primera fila del DataFrame filtrado
-    clase = filt_datos_alumnos_df.iloc[0]['CLASE']
 
 
 
-    #Context
-    context = {
-        'curso': CURSO,
-        'nombre_alumno': nombre_alumno,
-        'clase': clase
-    }
-    #Renderizar el word
-    docs_tpl.render(context)
-    #Guardar el word
-    docs_tpl.save(f'{PATH_OUTPUT_WORD}/Notas_Alumnos.docx')
+    for nombre_alumno in nombre_alumno_list:
+        # Filtra el DataFrame para obtener las filas correspondientes al primer nombre de la lista
+        filt_datos_alumnos_df = datos_alumnos[(datos_alumnos['NOMBRE'] == nombre_alumno)]
+        # Obtiene la clase correspondiente a la primera fila del DataFrame filtrado
+        clase = filt_datos_alumnos_df.iloc[0]['CLASE']
+        # Imprime el nombre del alumno y la clase
+
+        #Context
+        context = {
+            'curso': CURSO,
+            'nombre_alumno': nombre_alumno,
+            'clase': clase
+        }
+        #Renderizar el word
+        docs_tpl.render(context)
+        title = f'Notas_{nombre_alumno}'
+        #Guardar el word
+        docs_tpl.save(f'{PATH_OUTPUT_WORD}/{title}.docx')
         
     
 
