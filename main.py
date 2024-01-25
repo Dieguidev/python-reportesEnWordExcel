@@ -1,6 +1,8 @@
 import pandas as pd
 import sys
 from docxtpl import DocxTemplate
+import shutil
+import os
 
 #excel 
 NOTAS_ALUMNOS_PATH=r'./inputs/Notas_Alumnos.xlsx'
@@ -77,17 +79,24 @@ def deteccionErrores(df):
         #sys.exit(0)
 
 
-# Generame una funcion para eliminar tildes de un texto y lo reemplace por la misma letra pero sin tilde de mayusculas
-
+# funcion para eliminar tildes 
 def remove_tildes_mayus(text):
     return text.replace('Á', 'A').replace('É', 'E').replace('Í', 'I').replace('Ó', 'O').replace('Ú', 'U')
 
 
+def eliminarCrearCarpetas(path):
+    if os.path.exists(path):
+        shutil.rmtree(path)
+    
+    os.mkdir(path)
 
 
 
 
 def main():
+    
+    eliminarCrearCarpetas(PATH_OUTPUT_WORD)
+    
     
     #Cargar documento
     docs_tpl = DocxTemplate(NOTAS_ALUMNOS_PATH_WORD)
