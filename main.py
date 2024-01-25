@@ -67,14 +67,14 @@ def deteccionErrores(df):
                     print(f'La nota {row[trimestre]} no es válida para el trimestre {trimestre}')
                     err3 = True
 
-        if err1 or err2 or err3:
-            print('')
-            print('Se encontraron errores en el DataFrame:')
-            sys.exit(1)
-        else:
-            print('')
-            print('No se encontraron errores en el DataFrame.')
-            sys.exit(0)
+    if err1 or err2 or err3:
+        print('')
+        print('Se encontraron errores en el DataFrame:')
+        sys.exit(1)
+    else:
+        print('')
+        print('No se encontraron errores en el DataFrame.')
+        #sys.exit(0)
 
 
 
@@ -102,9 +102,7 @@ def main():
     asig_list = sorted(list(excel_df['ASIGNATURA'].drop_duplicates()))
     print(asig_list)
     
-    nombre_alumno_list = sorted(list(datos_alumnos['NOMBRE']))
-    print(nombre_alumno_list)
-    nombre_alumno = nombre_alumno_list[0]
+
     
     # Crea una lista vacía para almacenar los valores de las columnas 'ASIGNATURA'
     filter_td_asig = []
@@ -118,14 +116,25 @@ def main():
     print('')
     
     deteccionErrores(excel_df)
-    
-    
-    
+
+
+
+    # Obtén una lista ordenada y sin duplicados de nombres de alumnos
+    nombre_alumno_list = sorted(list(datos_alumnos['NOMBRE']))
+    # Obtén el primer nombre de la lista (suponiendo que ya está ordenada)
+    nombre_alumno = nombre_alumno_list[0]
+    # Filtra el DataFrame para obtener las filas correspondientes al primer nombre de la lista
+    filt_datos_alumnos_df = datos_alumnos[(datos_alumnos['NOMBRE'] == nombre_alumno)]
+    # Obtiene la clase correspondiente a la primera fila del DataFrame filtrado
+    clase = filt_datos_alumnos_df.iloc[0]['CLASE']
+
+
+
     #Context
     context = {
         'curso': CURSO,
         'nombre_alumno': nombre_alumno,
-        'clase': '4-C'
+        'clase': clase
     }
     #Renderizar el word
     docs_tpl.render(context)
