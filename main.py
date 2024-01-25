@@ -30,6 +30,7 @@ dict_asig = {
 }
 
 
+
 # Función que realiza la detección de errores en un DataFrame
 def deteccionErrores(df):
     
@@ -47,8 +48,6 @@ def deteccionErrores(df):
             # Filtra el DataFrame para obtener las filas correspondientes al alumno y asignatura actual
             filt_al_as_df = df[(df['NOMBRE'] == alum) & (df['ASIGNATURA'] == asig)]
 
-            
-
             # Verifica si no hay notas para el alumno y asignatura actual
             if len(filt_al_as_df) == 0:
                 print(f'No hay notas para el alumno {alum} y la asignatura {asig}')
@@ -57,8 +56,7 @@ def deteccionErrores(df):
             elif len(filt_al_as_df) > 1:
                 print(f'Hay más de una nota para el alumno {alum} y la asignatura {asig}')
                 err2 = True
-        
-        
+
         # Itera sobre cada fila del DataFrame
         for index, row in df.iterrows():
             trimestre_list = ['NOTA T1', 'NOTA T2', 'NOTA T3']
@@ -79,9 +77,11 @@ def deteccionErrores(df):
         #sys.exit(0)
 
 
+
 # funcion para eliminar tildes 
 def remove_tildes_mayus(text):
     return text.replace('Á', 'A').replace('É', 'E').replace('Í', 'I').replace('Ó', 'O').replace('Ú', 'U')
+
 
 
 def eliminarCrearCarpetas(path):
@@ -89,6 +89,7 @@ def eliminarCrearCarpetas(path):
         shutil.rmtree(path)
     
     os.mkdir(path)
+
 
 
 def crearWordAsignarTag(datos_alumnos, excel_df):
@@ -131,7 +132,6 @@ def crearWordAsignarTag(datos_alumnos, excel_df):
 
 
 
-    
 
 def main():
     
@@ -145,7 +145,7 @@ def main():
 
     # Itera sobre cada fila del DataFrame
     # for index, row in excel_df.iterrows():
-    #     # Imprime el índice de la fila, el valor de la columna 'NOMBRE' y el valor de la columna 'NOTA T1'
+    #     # Imprime el ín<<<<dice de la fila, el valor de la columna 'NOMBRE' y el valor de la columna 'NOTA T1'
     #     print(index, row['NOMBRE'], row['NOTA T1'])
 
 
