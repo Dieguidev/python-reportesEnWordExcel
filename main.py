@@ -91,40 +91,11 @@ def eliminarCrearCarpetas(path):
     os.mkdir(path)
 
 
-
-
-def main():
-    
-    eliminarCrearCarpetas(PATH_OUTPUT_WORD)
-    
-    
-    #Cargar documento
-    docs_tpl = DocxTemplate(NOTAS_ALUMNOS_PATH_WORD)
-    
-    
-    
-    
-    
-    # Lee el archivo Excel y carga los datos en un DataFrame usando pandas
-    excel_df = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Notas')
-    datos_alumnos = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Datos_Alumnos')
-
-
-    # Itera sobre cada fila del DataFrame
-    # for index, row in excel_df.iterrows():
-    #     # Imprime el índice de la fila, el valor de la columna 'NOMBRE' y el valor de la columna 'NOTA T1'
-    #     print(index, row['NOMBRE'], row['NOTA T1'])
-        
-        
+def crearWordAsignarTag(datos_alumnos, excel_df):
     # Crea una lista de asignaturas únicas en el DataFrame las ordena y la imprime
     asig_list = sorted(list(excel_df['ASIGNATURA'].drop_duplicates()))
-    print(asig_list)
-    
-
-    
     # Crea una lista vacía para almacenar los valores de las columnas 'ASIGNATURA'
     filter_td_asig = []
-    
     # Itera sobre cada asignatura en la lista
     for item in asig_list:
         # Obtiene el valor de la columna 'ASIGNATURA' correspondiente a la asignatura actual
@@ -132,15 +103,11 @@ def main():
         # Agrega el valor a la lista
         filter_td_asig.append(valorTd)
     print('')
-    
-    deteccionErrores(excel_df)
-    
 
+    #Cargar documento de plantilla
+    docs_tpl = DocxTemplate(NOTAS_ALUMNOS_PATH_WORD)
     # Obtén una lista ordenada y sin duplicados de nombres de alumnos
     nombre_alumno_list = sorted(list(datos_alumnos['NOMBRE']))
-
-
-
     for nombre_alumno in nombre_alumno_list:
         # Filtra el DataFrame para obtener las filas correspondientes al primer nombre de la lista
         filt_datos_alumnos_df = datos_alumnos[(datos_alumnos['NOMBRE'] == nombre_alumno)]
@@ -161,8 +128,37 @@ def main():
         title = remove_tildes_mayus(title)
         #Guardar el word
         docs_tpl.save(f'{PATH_OUTPUT_WORD}/{title}.docx')
-        
+
+
+
     
+
+def main():
+    
+    eliminarCrearCarpetas(PATH_OUTPUT_WORD)
+
+
+    # Lee el archivo Excel y carga los datos en un DataFrame usando pandas
+    excel_df = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Notas')
+    datos_alumnos = pd.read_excel(NOTAS_ALUMNOS_PATH, sheet_name='Datos_Alumnos')
+
+
+    # Itera sobre cada fila del DataFrame
+    # for index, row in excel_df.iterrows():
+    #     # Imprime el índice de la fila, el valor de la columna 'NOMBRE' y el valor de la columna 'NOTA T1'
+    #     print(index, row['NOMBRE'], row['NOTA T1'])
+
+
+
+
+
+    deteccionErrores(excel_df)
+
+
+    crearWordAsignarTag(datos_alumnos, excel_df)
+
+
+
 
 if __name__=='__main__':
     main()
