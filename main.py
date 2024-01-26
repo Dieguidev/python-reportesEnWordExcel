@@ -3,6 +3,7 @@ import sys
 from docxtpl import DocxTemplate
 import shutil
 import os
+import copy
 
 #excel 
 NOTAS_ALUMNOS_PATH=r'./inputs/Notas_Alumnos.xlsx'
@@ -11,8 +12,13 @@ NOTAS_ALUMNOS_PATH=r'./inputs/Notas_Alumnos.xlsx'
 NOTAS_ALUMNOS_PATH_WORD=r'./inputs/Plantilla_Notas.docx'
 PATH_OUTPUT_WORD=r'./outputs'
 
-
 CURSO = '2022-2023'
+
+# Colores
+SUSPENSO_COLOR = 'ec7c7b'
+APROBADO_COLOR = 'fbe083'
+NOTABLE_COLOR = '4db4d7'
+SOBRESALIENTE_COLOR = '48bf91'
 
 dict_asig = {
     'LENGUA CASTELLANA Y LITERATURA':   'Lengua Castellana y Literatura',
@@ -91,6 +97,33 @@ def eliminarCrearCarpetas(path):
     os.mkdir(path)
 
 
+def ObtenerNotaFinal(dict_asignatura):
+    newAsignaturaDict = copy.deepcopy(dict_asignatura)
+    TRIMESTRE_LIST = ['t1', 't2', 't3']
+
+    #obtener la nota final
+    nota_media = 0
+    for trimestre in TRIMESTRE_LIST:
+        nota_media += newAsignaturaDict[trimestre]
+    nota_media = nota_media / 3
+    newAsignaturaDict['nota_final'] = round(nota_media, 1)
+    
+    #Obtenemos la calificacion
+    if nota_media < 5.0:
+        newAsignaturaDict['calificacion'] = 'SUSPENSO'
+        newAsignaturaDict['color'] = SUSPENSO_COLOR
+    elif nota_media < 7.0:
+        newAsignaturaDict['calificacion'] = 'APROBADO'
+        newAsignaturaDict['color'] = APROBADO_COLOR
+    elif nota_media < 9.0:
+        newAsignaturaDict['calificacion'] = 'NOTABLE'
+        newAsignaturaDict['color'] = NOTABLE_COLOR
+    else:
+        newAsignaturaDict['calificacion'] = 'SOBRESALIENTE'
+        newAsignaturaDict['color'] = SOBRESALIENTE_COLOR
+    return newAsignaturaDict
+
+
 
 def crearWordAsignarTag(datos_alumnos, excel_df):
     # Crea una lista de asignaturas únicas en el DataFrame las ordena y la imprime
@@ -114,7 +147,6 @@ def crearWordAsignarTag(datos_alumnos, excel_df):
         filt_datos_alumnos_df = datos_alumnos[(datos_alumnos['NOMBRE'] == nombre_alumno)]
         # Obtiene la clase correspondiente a la primera fila del DataFrame filtrado
         clase = filt_datos_alumnos_df.iloc[0]['CLASE']
-        # Imprime el nombre del alumno y la clase
 
         #Creamos tabla de notas
         asignatura_list = []
@@ -122,13 +154,16 @@ def crearWordAsignarTag(datos_alumnos, excel_df):
         for asig_idx in range(len(asig_list)):
             asign = asig_list[asig_idx]
             filt_al_asig_excel_df = excel_df[(excel_df['NOMBRE'] == nombre_alumno) & (excel_df['ASIGNATURA'] == asign)]
-            
+
             asignatura_dict = {
                 'nombre_asignatura': filter_td_asig[asig_idx],
                 't1': round(filt_al_asig_excel_df.iloc[0]['NOTA T1'], 1),
                 't2': round(filt_al_asig_excel_df.iloc[0]['NOTA T2'], 1),
                 't3': round(filt_al_asig_excel_df.iloc[0]['NOTA T3'], 1),
             }
+            #Calculamos la nota final
+            asignatura_dict = ObtenerNotaFinal(asignatura_dict)
+            #Agregamos a la lista de asignaturas
             asignatura_list.append(asignatura_dict)
 
         #Context
